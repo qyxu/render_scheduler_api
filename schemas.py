@@ -1,4 +1,3 @@
-
 from pydantic import BaseModel
 from typing import Optional
 from datetime import datetime
@@ -12,7 +11,6 @@ class JobCreate(BaseModel):
 
 class JobOut(JobCreate):
     id: int
-
     class Config:
         orm_mode = True
 
@@ -20,10 +18,9 @@ class ScheduleCreate(BaseModel):
     job_id: str
     start: int
     end: int
-    created_at: Optional[datetime] = None
 
 class ScheduleOut(ScheduleCreate):
     id: int
-
+    created_at: Optional[datetime]
     class Config:
         orm_mode = True

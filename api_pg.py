@@ -7,6 +7,8 @@ from models import Base, Job, Schedule
 from schemas import JobCreate, JobOut, ScheduleCreate, ScheduleOut
 from datetime import datetime
 import os
+from scheduler import run_scheduler
+
 DATABASE_URL = os.environ.get("DATABASE_URL")
 
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False} if "sqlite" in DATABASE_URL else {})
@@ -45,3 +47,20 @@ def create_schedule(schedule: ScheduleCreate, db: Session = Depends(get_db)):
 @app.get("/schedule", response_model=list[ScheduleOut])
 def get_schedule(db: Session = Depends(get_db)):
     return db.query(Schedule).all()
+
+@app.post("/run-scheduler")
+def run_scheduler_endpoint(db: Session = Depends(get_db)):
+    schedule = run_scheduler(output_json=True)
+    if not schedule:
+        raise HTTPException(status_code=400, detail="No schedule generated")
+
+    db.query(Schedule).delete()
+    for entry in schedule:
+        db.add(Schedule(
+            job_id=entry["job_id"],
+            start=entry["start"],
+            end=entry["end"],
+            created_at=datetime.utcnow()
+        ))
+    db.commit()
+    return {"status": "success", "jobs_scheduled": len(schedule)}

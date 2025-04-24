@@ -28,7 +28,11 @@ def get_db():
 def create_job(job: JobCreate, db: Session = Depends(get_db)):
     db_job = Job(**job.dict())
     db.add(db_job)
-    db.commit()
+    try:
+        db.commit()
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(status_code=400, detail="Job ID already exists")
     db.refresh(db_job)
     return db_job
 

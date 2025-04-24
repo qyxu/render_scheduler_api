@@ -68,3 +68,10 @@ def run_scheduler_endpoint(db: Session = Depends(get_db)):
         ))
     db.commit()
     return {"status": "success", "jobs_scheduled": len(schedule)}
+
+@app.delete("/reset")
+def reset_data(db: Session = Depends(get_db)):
+    db.query(Schedule).delete()
+    db.query(Job).delete()
+    db.commit()
+    return {"status": "reset"}

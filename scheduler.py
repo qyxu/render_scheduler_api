@@ -32,7 +32,7 @@ def run_scheduler_from_db(db: Session):
     solver = cp_model.CpSolver()
     status = solver.Solve(model)
 
-   if status in [cp_model.OPTIMAL, cp_model.FEASIBLE]:
+    if status in [cp_model.OPTIMAL, cp_model.FEASIBLE]:
         return [
             {
                 "job_id": job_id,

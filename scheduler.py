@@ -1,7 +1,6 @@
 
 import pandas as pd
 from ortools.sat.python import cp_model
-from visualizer import draw_gantt_chart
 
 def run_scheduler(output_json=False):
     jobs = load_jobs_from_jobboss()
@@ -73,7 +72,6 @@ def run_scheduler(output_json=False):
             })
         schedule_df = pd.DataFrame(result)
         print(schedule_df)
-        draw_gantt_chart(schedule_df)
         return schedule_df.to_dict(orient="records") if output_json else None
     else:
         print("No solution found.")

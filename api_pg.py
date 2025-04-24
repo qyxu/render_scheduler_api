@@ -4,8 +4,9 @@ from sqlalchemy.orm import Session
 from models import Job, Schedule, Base
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+import os
+DATABASE_URL = os.environ.get("DATABASE_URL")
 
-DATABASE_URL = "postgresql://scheduler:scheduler@db:5432/scheduler"
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 

@@ -8,6 +8,7 @@ from schemas import JobCreate, JobOut, ScheduleCreate, ScheduleOut
 from datetime import datetime
 import os
 from scheduler import run_scheduler_from_db
+from sqlalchemy.exc import IntegrityError
 
 DATABASE_URL = os.environ.get("DATABASE_URL")
 

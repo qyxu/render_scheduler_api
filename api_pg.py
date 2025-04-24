@@ -7,7 +7,7 @@ from models import Base, Job, Schedule
 from schemas import JobCreate, JobOut, ScheduleCreate, ScheduleOut
 from datetime import datetime
 import os
-from scheduler import run_scheduler
+from scheduler import run_scheduler_from_db
 
 DATABASE_URL = os.environ.get("DATABASE_URL")
 
@@ -50,7 +50,7 @@ def get_schedule(db: Session = Depends(get_db)):
 
 @app.post("/run-scheduler")
 def run_scheduler_endpoint(db: Session = Depends(get_db)):
-    schedule = run_scheduler(output_json=True)
+    schedule = run_scheduler_from_db(db)
     if not schedule:
         raise HTTPException(status_code=400, detail="No schedule generated")
 

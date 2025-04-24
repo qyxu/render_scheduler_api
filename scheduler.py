@@ -1,7 +1,6 @@
 
 import pandas as pd
 from ortools.sat.python import cp_model
-from jobboss_data import load_jobs_from_jobboss
 from visualizer import draw_gantt_chart
 
 def run_scheduler(output_json=False):

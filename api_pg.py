@@ -8,7 +8,7 @@ from schemas import JobCreate, JobOut, ScheduleCreate, ScheduleOut
 from datetime import datetime
 import os
 from scheduler import run_scheduler_from_db
-from scheduler_v2 import run_scheduler_v2
+from scheduler2 import run_scheduler_v2
 from sqlalchemy.exc import IntegrityError
 import logging
 logger = logging.getLogger(__name__)

@@ -9,6 +9,8 @@ from datetime import datetime
 import os
 from scheduler import run_scheduler_from_db
 from sqlalchemy.exc import IntegrityError
+import logging
+logger = logging.getLogger(__name__)
 
 DATABASE_URL = os.environ.get("DATABASE_URL")
 

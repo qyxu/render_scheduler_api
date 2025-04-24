@@ -32,12 +32,13 @@ def run_scheduler_from_db(db: Session):
     solver = cp_model.CpSolver()
     status = solver.Solve(model)
 
-    if status in [cp_model.OPTIMAL, cp_model.FEASIBLE]:
+   if status in [cp_model.OPTIMAL, cp_model.FEASIBLE]:
         return [
             {
                 "job_id": job_id,
                 "start": solver.Value(data["start"]),
-                "end": solver.Value(data["end"])
+                "end": solver.Value(data["end"]),
+                "version": "v1"
             }
             for job_id, data in job_vars.items()
         ]

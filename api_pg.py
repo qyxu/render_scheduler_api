@@ -8,6 +8,7 @@ from schemas import JobCreate, JobOut, ScheduleCreate, ScheduleOut
 from datetime import datetime
 import os
 from scheduler import run_scheduler_from_db
+from scheduler_v2 import run_scheduler_v2
 from sqlalchemy.exc import IntegrityError
 import logging
 logger = logging.getLogger(__name__)
@@ -83,3 +84,10 @@ def reset_data(db: Session = Depends(get_db)):
     db.query(Job).delete()
     db.commit()
     return {"status": "reset"}
+
+@app.post("/compare-schedulers")
+def compare_schedulers(db: Session = Depends(get_db)):
+    jobs = db.query(Job).all()
+    v1_schedule = run_scheduler_from_db(db)
+    v2_schedule = run_scheduler_v2(db)
+    return v1_schedule + v2_schedule

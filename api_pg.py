@@ -26,15 +26,20 @@ def get_db():
 
 @app.post("/jobs", response_model=JobOut)
 def create_job(job: JobCreate, db: Session = Depends(get_db)):
-    db_job = Job(**job.dict())
-    db.add(db_job)
     try:
+        db_job = Job(**job.dict())
+        db.add(db_job)
         db.commit()
+        db.refresh(db_job)
+        return db_job
     except IntegrityError:
         db.rollback()
-        raise HTTPException(status_code=400, detail="Job ID already exists")
-    db.refresh(db_job)
-    return db_job
+        logger.warning(f"Duplicate Job ID: {job.job_id}")
+        raise HTTPException(status_code=400, detail=f"Job ID '{job.job_id}' already exists")
+    except Exception as e:
+        db.rollback()
+        logger.exception("Failed to create job")
+        raise HTTPException(status_code=500, detail="Unexpected error while adding job")
 
 @app.get("/jobs", response_model=list[JobOut])
 def get_jobs(db: Session = Depends(get_db)):

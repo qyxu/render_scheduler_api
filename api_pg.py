@@ -89,5 +89,5 @@ def reset_data(db: Session = Depends(get_db)):
 def compare_schedulers(db: Session = Depends(get_db)):
     jobs = db.query(Job).all()
     v1_schedule = run_scheduler_from_db(db)
-    v2_schedule = run_scheduler_v2(db)
+    v2_schedule = run_scheduler_v2_from_db(db)
     return v1_schedule + v2_schedule
